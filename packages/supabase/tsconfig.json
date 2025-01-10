@@ -1,0 +1,17 @@
+{
+  "extends": "gts/tsconfig-google.json",
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "lib": ["dom", "es2015", "es2016", "es2017", "es2018", "es2019", "es2020"],
+    "module": "Node16",
+    "moduleResolution": "NodeNext",
+    "target": "es2016",
+    "strict": true,
+    "outDir": "dist",
+    "rootDir": "src",
+    "resolvePackageJsonExports": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}

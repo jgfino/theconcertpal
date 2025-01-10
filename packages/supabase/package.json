@@ -1,0 +1,21 @@
+{
+  "name": "@theconcertpal/supabase",
+  "version": "1.0.0",
+  "types": "./dist/index.d.ts",
+  "description": "Supabase schema and config, functions, and types",
+  "scripts": {
+    "types:local": "npx supabase gen types typescript --local > ./src/database.types.ts",
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "supabase start",
+    "stop": "supabase stop",
+    "reset-db": "supabase reset-db",
+    "reset-db:remote": "supabase reset-db --linked",
+    "status": "supabase status",
+    "migration": "supabase migration new"
+  },
+  "devDependencies": {
+    "supabase": "^2.2.1",
+    "typescript": "^5.7.3"
+  }
+}
