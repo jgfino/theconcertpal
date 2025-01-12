@@ -18,7 +18,7 @@ export default function MobileNavWrapper({
   const [open, setOpen] = useState(false);
 
   return (
-    <nav className={`h-full w-full md:hidden ${className}`}>
+    <div className={`h-full w-full md:hidden ${className || ""}`}>
       <div
         className={`h-full absolute left-0 right-0 duration-300 motion-reduce:duration-0 ${
           open ? "opacity-100" : "opacity-0 pointer-events-none"
@@ -31,6 +31,6 @@ export default function MobileNavWrapper({
         <FullLogo />
         <Hamburger onClick={() => setOpen(!open)} />
       </div>
-    </nav>
+    </div>
   );
 }

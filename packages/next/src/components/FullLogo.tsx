@@ -9,7 +9,7 @@ export function FullLogo({ className }: FullLogoProps) {
   return (
     <>
       <h1
-        className={`text-2xl md:hidden lg:block lg:text-4xl font-black text-primary text-nowrap ${className}`}
+        className={`text-2xl md:hidden lg:block lg:text-4xl font-black text-primary text-nowrap ${className || ""}`}
       >
         The ConcertPal
       </h1>
@@ -18,7 +18,7 @@ export function FullLogo({ className }: FullLogoProps) {
         height={48}
         src={logo}
         alt="The ConcertPal Logo"
-        className={`hidden md:text-5xl md:block lg:hidden font-black text-primary text-nowrap ${className}`}
+        className={`hidden md:text-5xl md:block lg:hidden font-black text-primary text-nowrap ${className || ""}`}
       />
     </>
   );
