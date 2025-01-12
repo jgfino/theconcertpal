@@ -9,8 +9,8 @@
     "dev": "tsc --watch",
     "start": "supabase start",
     "stop": "supabase stop",
-    "reset-db": "supabase reset-db",
-    "reset-db:remote": "supabase reset-db --linked",
+    "reset-db": "supabase db reset",
+    "reset-db:remote": "supabase db reset --linked",
     "status": "supabase status",
     "migration": "supabase migration new"
   },

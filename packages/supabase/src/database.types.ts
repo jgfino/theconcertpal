@@ -34,18 +34,184 @@ export type Database = {
   }
   public: {
     Tables: {
-      profiles: {
+      articles: {
         Row: {
+          artists: string[] | null
+          author: string | null
+          created_at: string
+          date: string
+          id: string
+          photographer: string | null
+          title: string
+          updated_at: string
+          venue: string | null
+        }
+        Insert: {
+          artists?: string[] | null
+          author?: string | null
+          created_at?: string
+          date: string
+          id: string
+          photographer?: string | null
+          title: string
+          updated_at?: string
+          venue?: string | null
+        }
+        Update: {
+          artists?: string[] | null
+          author?: string | null
+          created_at?: string
+          date?: string
+          id?: string
+          photographer?: string | null
+          title?: string
+          updated_at?: string
+          venue?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "articles_author_fkey"
+            columns: ["author"]
+            isOneToOne: false
+            referencedRelation: "creator_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "articles_photographer_fkey"
+            columns: ["photographer"]
+            isOneToOne: false
+            referencedRelation: "creator_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "articles_venue_fkey"
+            columns: ["venue"]
+            isOneToOne: false
+            referencedRelation: "venues"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      artists: {
+        Row: {
+          created_at: string
           id: string
           name: string
         }
         Insert: {
-          id: string
+          created_at?: string
+          id?: string
           name: string
         }
         Update: {
+          created_at?: string
           id?: string
           name?: string
+        }
+        Relationships: []
+      }
+      creator_profiles: {
+        Row: {
+          bio: string
+          created_at: string | null
+          facebook_url: string | null
+          first_name: string
+          id: string
+          instagram_url: string | null
+          last_name: string
+          pronouns: string | null
+          tiktok_url: string | null
+          twitter_url: string | null
+          updated_at: string | null
+          user_id: string
+          web_url: string | null
+        }
+        Insert: {
+          bio: string
+          created_at?: string | null
+          facebook_url?: string | null
+          first_name: string
+          id?: string
+          instagram_url?: string | null
+          last_name: string
+          pronouns?: string | null
+          tiktok_url?: string | null
+          twitter_url?: string | null
+          updated_at?: string | null
+          user_id: string
+          web_url?: string | null
+        }
+        Update: {
+          bio?: string
+          created_at?: string | null
+          facebook_url?: string | null
+          first_name?: string
+          id?: string
+          instagram_url?: string | null
+          last_name?: string
+          pronouns?: string | null
+          tiktok_url?: string | null
+          twitter_url?: string | null
+          updated_at?: string | null
+          user_id?: string
+          web_url?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          admin: boolean | null
+          bio: string | null
+          created_at: string | null
+          first_name: string
+          id: string
+          last_name: string
+          pronouns: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          admin?: boolean | null
+          bio?: string | null
+          created_at?: string | null
+          first_name: string
+          id?: string
+          last_name: string
+          pronouns?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          admin?: boolean | null
+          bio?: string | null
+          created_at?: string | null
+          first_name?: string
+          id?: string
+          last_name?: string
+          pronouns?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      venues: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -54,7 +220,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_admin: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
+      is_creator: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
