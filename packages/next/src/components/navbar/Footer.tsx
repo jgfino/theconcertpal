@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { IoLogoInstagram, IoMdMail } from "react-icons/io";
+import { IoLogoInstagram } from "react-icons/io";
 
 export function Footer() {
   return (
-    <div className="hidden md:flex flex-row items-center w-full justify-center gap-4 pb-12">
+    <div className="flex flex-row items-center w-full justify-center gap-4 text-sm">
       <Link className="text-fg-alt" href="/privacy-policy">
         Privacy Policy
       </Link>
@@ -13,9 +13,6 @@ export function Footer() {
         href="https://www.instagram.com/theconcertpal"
       >
         <IoLogoInstagram className="w-8 h-8" />
-      </Link>
-      <Link className="text-fg-alt" href="mailto:info@theconcertpal.com">
-        <IoMdMail className="w-8 h-8" />
       </Link>
       <Link className="text-fg-alt" href="mailto:info@theconcertpal.com">
         info@theconcertpal.com

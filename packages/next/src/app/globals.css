@@ -16,14 +16,32 @@ body {
   --background: #ffffff;
   --foreground: black;
   --primary: #9585ff;
+  --primary-alt: #b8aeff;
   --foreground-alt: #5e5e5e;
+  --gray-1: #353535;
+  --error: #e05950;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #222222;
     --foreground: white;
-    --primary: #b8aeff;
+    --primary: #9585ff;
+    --primary-alt: #b8aeff;
     --foreground-alt: #a7a7a7;
+    --gray-1: #353535;
+    --error: #e76c65;
+  }
+}
+
+/* Spinner */
+.spinner {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  animation: s2 1s infinite linear;
+}
+@keyframes s2 {
+  to {
+    transform: rotate(1turn);
   }
 }
