@@ -1,4 +1,3 @@
-import { WidthContainer } from "../layouts/WidthContainer";
 import { FullLogo } from "../FullLogo";
 import { NavItem } from "./NavItem";
 
@@ -6,10 +5,10 @@ interface DesktopTopBarProps {
   className?: string;
 }
 
-export function DesktopTopBar({ className }: DesktopTopBarProps) {
+export default function DesktopTopBar({ className }: DesktopTopBarProps) {
   return (
     <div
-      className={`hidden md:flex flex-row px-12 pt-12 justify-center items-center gap-12 ${className || ""}`}
+      className={`hidden md:flex flex-row justify-center items-center gap-12 ${className || ""}`}
     >
       <div className="flex flex-row w-full items-center justify-center gap-8">
         <NavItem text="My Shows" href="/my-shows" />

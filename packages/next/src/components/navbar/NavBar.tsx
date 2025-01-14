@@ -1,14 +1,11 @@
-import { DesktopTopBar } from "./DesktopNavBar";
-import { MobileNavMenu } from "./MobileNavMenu";
-import MobileNavWrapper from "./MobileNavWrapper";
+import DesktopTopBar from "./DesktopNavBar";
+import MobileNavMenu from "./MobileNavMenu";
 
 export function NavBar() {
   return (
     <nav>
       <DesktopTopBar />
-      <MobileNavWrapper>
-        <MobileNavMenu />
-      </MobileNavWrapper>
+      <MobileNavMenu />
     </nav>
   );
 }

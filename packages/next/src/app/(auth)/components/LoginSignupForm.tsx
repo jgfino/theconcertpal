@@ -102,7 +102,7 @@ export default function LoginSignupForm({
               : `/sign-in${nextUrl ? `?nextUrl=${nextUrl}` : ""}`
           }
         >
-          {type === "login" ? "Join Now!" : "Sign In Here"}
+          {type === "login" ? "Join Now!" : "Sign In"}
         </Link>
       </div>
     </div>

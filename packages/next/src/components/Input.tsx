@@ -19,6 +19,7 @@ export default function TextInput({
       {label && <label htmlFor={id}>{label}</label>}
       <input
         {...props}
+        id={id}
         className={`bg-gray-1 py-2 px-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary ${className || ""}`}
       />
       <ErrorMessage

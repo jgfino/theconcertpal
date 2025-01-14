@@ -49,6 +49,7 @@ export default function InputButton({
       />
       <button
         {...props}
+        id={id}
         disabled={loading || disabled}
         className={`bg-${color || "primary"} text-fg py-2 px-4 flex flex-row items-center justify-center gap-2 rounded-xl hover:brightness-110 ${loading ? "opacity-60" : ""} ${className || ""}`}
       >

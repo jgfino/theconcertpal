@@ -8,11 +8,11 @@ export default function MainLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="h-full w-screen">
+    <div className="flex flex-col min-h-full w-full p-8 md:pt-16 gap-8">
       <header>
         <NavBar />
       </header>
-      <div className="h-full">{children}</div>
+      <div className="flex flex-1">{children}</div>
       <footer>
         <Footer />
       </footer>

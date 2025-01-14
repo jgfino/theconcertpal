@@ -1,18 +1,34 @@
 import Link from "next/link";
+import { HTMLAttributeAnchorTarget } from "react";
 
 interface DesktopNavItemProps {
   className?: string;
   text: string;
-  href: string;
-  small?: boolean;
+  target?: HTMLAttributeAnchorTarget;
+  href?: string;
+  onClick?: () => void;
 }
 
-export function NavItem({ className, text, href, small }: DesktopNavItemProps) {
+export function NavItem({
+  className,
+  text,
+  target,
+  href,
+  onClick,
+}: DesktopNavItemProps) {
   return (
     <div
-      className={`font-medium ${small ? "" : "text-lg"} font-bold hover:text-primary text-nowrap ${className || ""}`}
+      onClick={onClick}
+      role="button"
+      className={`font-semibold text-lg hover:text-primary text-nowrap ${className || ""}`}
     >
-      <Link href={href}>{text}</Link>
+      {href ? (
+        <Link href={href} target={target}>
+          {text}
+        </Link>
+      ) : (
+        <span>{text}</span>
+      )}
     </div>
   );
 }

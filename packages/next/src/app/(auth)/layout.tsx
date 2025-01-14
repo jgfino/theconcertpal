@@ -11,7 +11,7 @@ export default function AuthLayout({
       <header>
         <FullLogo />
       </header>
-      {children}
+      <div className="flex flex-1">{children}</div>
       <footer>
         <Footer />
       </footer>

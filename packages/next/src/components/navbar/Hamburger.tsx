@@ -6,12 +6,11 @@ import * as hamburgerDarkAnimation from "@/animations/hamburger-dark.json";
 import { useEffect, useRef, useState } from "react";
 
 interface HamburgerProps {
+  open: boolean;
   onClick: () => void;
 }
 
-export default function Hamburger({ onClick }: HamburgerProps) {
-  const [open, setOpen] = useState(false);
-
+export default function Hamburger({ onClick, open }: HamburgerProps) {
   const hamburger = useRef<HTMLDivElement>(null);
   const animation = useRef<AnimationItem>(null);
 
@@ -51,7 +50,6 @@ export default function Hamburger({ onClick }: HamburgerProps) {
     <div
       role="button"
       onClick={() => {
-        setOpen((prev) => !prev);
         onClick();
       }}
       className="hamburger w-8 h-8"

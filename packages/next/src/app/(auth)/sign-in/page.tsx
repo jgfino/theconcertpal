@@ -23,8 +23,8 @@ export default async function SignInPage({
           <h1 className="text-3xl text-fg">Welcome Back.</h1>
           <p className="text-fg-alt">
             Log in to your account to track your upcoming shows, view your
-            concert journal, and see news and photos about your favorite
-            artists.
+            concert journal and stats, and see news and photos about your
+            favorite artists.
           </p>
           <LoginSignupForm type="login" nextUrl={nextUrl} />
         </div>

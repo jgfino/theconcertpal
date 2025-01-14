@@ -9,14 +9,14 @@ interface FullLogoProps {
 export function FullLogo({ className }: FullLogoProps) {
   return (
     <Link href="/">
-      <h1
+      <span
         className={`text-2xl hidden lg:block lg:text-4xl font-black text-primary text-nowrap ${className || ""}`}
       >
         The Logo
-      </h1>
+      </span>
       <Image
-        width={48}
-        height={48}
+        width={36}
+        height={36}
         src={logo}
         alt="The ConcertPal Logo"
         className={`lg:hidden font-black text-primary text-nowrap ${className || ""}`}
