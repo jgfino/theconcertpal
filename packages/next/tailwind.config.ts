@@ -20,6 +20,7 @@ export default {
       spacing: {
         content: "100rem",
         form: "25rem",
+        "form-large": "30rem",
       },
     },
   },

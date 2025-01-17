@@ -1,6 +1,16 @@
 import { createServerClient } from "@supabase/ssr";
+import { getProfile } from "@theconcertpal/common/queries";
 import { Database } from "@theconcertpal/supabase";
 import { NextResponse, type NextRequest } from "next/server";
+
+const PUBLIC_ROUTES = [
+  "/sign-in",
+  "/create-account",
+  "/explore",
+  "/reviews-and-photos",
+  "/music-news",
+  "/about",
+];
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
@@ -40,15 +50,48 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (
-    !user &&
-    !request.nextUrl.pathname.startsWith("/sign-in") &&
-    !request.nextUrl.pathname.startsWith("/auth")
-  ) {
-    // no user, potentially respond by redirecting the user to the login page
+  const isPublic =
+    PUBLIC_ROUTES.some((route) => request.nextUrl.pathname.startsWith(route)) ||
+    request.nextUrl.pathname === "/";
+
+  if (!user && !isPublic) {
+    // no user, redirect to sign-in
     const url = request.nextUrl.clone();
-    url.pathname = "/sign-in";
+    url.searchParams.delete("email");
+    url.pathname = `/sign-in`;
     return NextResponse.redirect(url);
+  }
+
+  if (user) {
+    // If there is a user, check if there is a profile
+    const { data } = await getProfile(supabase);
+
+    if (!data && !request.nextUrl.pathname.startsWith("/create-profile")) {
+      // no profile, redirect to create-profile but still keep session details
+      const url = request.nextUrl.clone();
+      url.pathname = "/create-profile";
+      url.searchParams.set("email", user.email!);
+      return NextResponse.redirect(url);
+    }
+
+    // Can't go to sign-in or create-account if already logged in
+    if (
+      request.nextUrl.pathname.startsWith("/sign-in") ||
+      request.nextUrl.pathname.startsWith("/create-account")
+    ) {
+      const url = request.nextUrl.clone();
+      url.searchParams.delete("email");
+      url.pathname = "/";
+      return NextResponse.redirect(url);
+    }
+
+    // Can't go to create-profile if already has a profile
+    if (data && request.nextUrl.pathname.startsWith("/create-profile")) {
+      const url = request.nextUrl.clone();
+      url.searchParams.delete("email");
+      url.pathname = "/";
+      return NextResponse.redirect(url);
+    }
   }
 
   // IMPORTANT: You *must* return the supabaseResponse object as it is.

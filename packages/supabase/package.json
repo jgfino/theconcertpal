@@ -15,6 +15,7 @@
     "migration": "supabase migration new"
   },
   "devDependencies": {
+    "@supabase/supabase-js": "^2.47.12",
     "supabase": "^2.2.1",
     "typescript": "^5.7.3"
   }

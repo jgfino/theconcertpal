@@ -1,41 +1,68 @@
 "use server";
 
 import { createServerClient } from "@/utils/supabase/server";
-import { loginSchema, signupSchema } from "./schema";
+import {
+  login as _login,
+  signup as _signup,
+  createOrEditProfile as _createOrEditProfile,
+} from "@theconcertpal/common/actions";
+import { redirect } from "next/navigation";
 
-export async function login(email: string, password: string) {
+export async function login(formData: any) {
   const supabase = await createServerClient();
 
-  const validatedData = loginSchema.parse({
-    email: email,
-    password: password,
-  });
-
-  const { error } = await supabase.auth.signInWithPassword(validatedData);
+  const { error } = await _login(supabase, formData);
 
   if (error) {
     console.error(error);
-    throw new Error(error.message);
+    return {
+      error: error.message,
+    };
   }
+
+  redirect("/my-shows");
 }
 
-export async function signup(
-  email: string,
-  password: string,
-  confirmPassword: string
-) {
+export async function signup(formData: any) {
   const supabase = await createServerClient();
+  const { data, error } = await _signup(supabase, formData);
 
-  const validatedData = signupSchema.parse({
-    email: email,
-    password: password,
-    confirmPassword: confirmPassword,
-  });
+  if (error || !data) {
+    console.error(error);
+    return {
+      error: error.message,
+    };
+  }
 
-  const { error } = await supabase.auth.signUp(validatedData);
+  redirect(`/create-profile?email=${data.email!}`);
+}
+
+export async function logout() {
+  const supabase = await createServerClient();
+  const { error } = await supabase.auth.signOut();
 
   if (error) {
     console.error(error);
-    throw new Error(error.message);
+    return {
+      error: error.message,
+    };
   }
+
+  redirect("/");
+}
+
+export async function createOrEditProfile(formData: any) {
+  const supabase = await createServerClient();
+  const { error } = await _createOrEditProfile(supabase, formData);
+
+  if (error) {
+    console.error(error);
+    return {
+      error: error.message.includes("duplicate key value")
+        ? "Username already taken"
+        : error.message,
+    };
+  }
+
+  redirect("/my-shows");
 }

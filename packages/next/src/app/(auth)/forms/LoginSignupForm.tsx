@@ -2,26 +2,23 @@
 
 import Button from "../../../components/Button";
 import Input from "../../../components/Input";
-import { login, signup } from "../actions";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema, signupSchema } from "../schema";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { loginSchema, signupSchema } from "@theconcertpal/common/zod";
+import { useTransition } from "react";
 
 interface LoginSignupFormProps {
   className?: string;
   type: "login" | "signup";
-  nextUrl?: string;
+  onSubmitAction: (data: any) => Promise<{ error: string | null }>;
 }
 
 export default function LoginSignupForm({
   className,
   type,
-  nextUrl,
+  onSubmitAction,
 }: LoginSignupFormProps) {
-  const router = useRouter();
-
   const {
     register,
     handleSubmit,
@@ -31,29 +28,23 @@ export default function LoginSignupForm({
     resolver: zodResolver(type === "login" ? loginSchema : signupSchema),
   });
 
-  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    let error = true;
-    try {
-      if (type === "login") {
-        await login(data.email, data.password);
-      } else {
-        await signup(data.email, data.password, data.confirmPassword);
-      }
-      error = false;
-    } catch (error: any) {
-      console.error(error);
-      setError("submit", { message: error.message ?? "An error occurred" });
-      error = true;
-    }
+  const [isPending, startTransition] = useTransition();
 
-    if (!error) {
-      router.push(nextUrl || "/my-shows");
-    }
-  };
+  const onSubmit = handleSubmit(async (data) => {
+    startTransition(async () => {
+      const { error } = await onSubmitAction(data);
+
+      if (error) {
+        setError("submit", {
+          message: error,
+        });
+      }
+    });
+  });
 
   return (
     <div className={`flex flex-col gap-8 ${className || ""}`}>
-      <form className="flex flex-col gap-8" onSubmit={handleSubmit(onSubmit)}>
+      <form className="flex flex-col gap-8" onSubmit={onSubmit}>
         <Input
           {...register("email")}
           id="email"
@@ -83,7 +74,7 @@ export default function LoginSignupForm({
           {...register("submit")}
           id="submit"
           type="submit"
-          loading={isSubmitting}
+          loading={isSubmitting || isPending}
           label={type === "login" ? "Log In" : "Sign Up"}
           errors={errors}
         />
@@ -96,11 +87,7 @@ export default function LoginSignupForm({
         </span>
         <Link
           className="underline"
-          href={
-            type === "login"
-              ? `/create-account${nextUrl ? `?nextUrl=${nextUrl}` : ""}`
-              : `/sign-in${nextUrl ? `?nextUrl=${nextUrl}` : ""}`
-          }
+          href={type === "login" ? "/create-account" : "/sign-in"}
         >
           {type === "login" ? "Join Now!" : "Sign In"}
         </Link>

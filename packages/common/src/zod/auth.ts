@@ -6,13 +6,15 @@ const passwordValidation = new RegExp(
 );
 
 export const loginSchema = z.object({
-  email: z.string().email(),
+  email: z.string().email({ message: "Invalid email" }),
   password: z.string(),
 });
 
+export type LoginSchema = z.infer<typeof loginSchema>;
+
 export const signupSchema = z
   .object({
-    email: z.string().email(),
+    email: z.string().email({ message: "Invalid email" }),
     password: z.string().regex(passwordValidation, {
       message:
         "Password must be at least 8 characters and contain at least one uppercase letter, one lowercase letter, and one number",
@@ -23,3 +25,5 @@ export const signupSchema = z
     message: "Passwords do not match",
     path: ["confirmPassword"],
   });
+
+export type SignupSchema = z.infer<typeof signupSchema>;

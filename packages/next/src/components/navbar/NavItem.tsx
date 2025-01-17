@@ -20,7 +20,7 @@ export function NavItem({
     <div
       onClick={onClick}
       role="button"
-      className={`font-semibold text-lg hover:text-primary text-nowrap ${className || ""}`}
+      className={`font-semibold hover:text-primary text-nowrap ${className || ""}`}
     >
       {href ? (
         <Link href={href} target={target}>

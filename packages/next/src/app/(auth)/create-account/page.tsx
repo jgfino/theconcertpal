@@ -1,21 +1,7 @@
-import LoginSignupForm from "@/app/(auth)/components/LoginSignupForm";
-import { createServerClient } from "@/utils/supabase/server";
-import { redirect } from "next/navigation";
+import LoginSignupForm from "@/app/(auth)/forms/LoginSignupForm";
+import { signup } from "../actions";
 
-export default async function CreateAccountPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ nextUrl?: string }>;
-}) {
-  const { nextUrl } = await searchParams;
-
-  const supabase = await createServerClient();
-  const { data } = await supabase.auth.getUser();
-
-  if (data?.user) {
-    redirect(nextUrl || "/my-shows");
-  }
-
+export default async function CreateAccountPage() {
   return (
     <div className="flex flex-1 justify-center">
       <div className="max-w-form flex flex-col flex-1 min-h-full justify-center">
@@ -25,7 +11,7 @@ export default async function CreateAccountPage({
             Join now to track your upcoming shows, view your concert journal and
             stats, and see news and photos about your favorite artists.
           </p>
-          <LoginSignupForm type="signup" nextUrl={nextUrl} />
+          <LoginSignupForm onSubmitAction={signup} type="signup" />
         </div>
       </div>
     </div>

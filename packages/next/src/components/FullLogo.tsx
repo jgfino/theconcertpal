@@ -10,9 +10,9 @@ export function FullLogo({ className }: FullLogoProps) {
   return (
     <Link href="/">
       <span
-        className={`text-2xl hidden lg:block lg:text-4xl font-black text-primary text-nowrap ${className || ""}`}
+        className={`text-2xl hidden lg:block lg:text-5xl font-black text-primary text-nowrap ${className || ""}`}
       >
-        The Logo
+        The ConcertPal
       </span>
       <Image
         width={36}

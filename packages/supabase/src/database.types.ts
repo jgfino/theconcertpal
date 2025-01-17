@@ -38,6 +38,7 @@ export type Database = {
         Row: {
           artists: string[] | null
           author: string | null
+          body_markdown: string
           created_at: string
           date: string
           id: string
@@ -49,6 +50,7 @@ export type Database = {
         Insert: {
           artists?: string[] | null
           author?: string | null
+          body_markdown: string
           created_at?: string
           date: string
           id: string
@@ -60,6 +62,7 @@ export type Database = {
         Update: {
           artists?: string[] | null
           author?: string | null
+          body_markdown?: string
           created_at?: string
           date?: string
           id?: string
@@ -169,6 +172,7 @@ export type Database = {
           pronouns: string | null
           updated_at: string | null
           user_id: string
+          username: string
         }
         Insert: {
           admin?: boolean | null
@@ -180,6 +184,7 @@ export type Database = {
           pronouns?: string | null
           updated_at?: string | null
           user_id: string
+          username: string
         }
         Update: {
           admin?: boolean | null
@@ -191,6 +196,7 @@ export type Database = {
           pronouns?: string | null
           updated_at?: string | null
           user_id?: string
+          username?: string
         }
         Relationships: []
       }

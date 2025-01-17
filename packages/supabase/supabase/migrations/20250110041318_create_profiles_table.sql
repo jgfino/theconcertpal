@@ -2,16 +2,17 @@ create extension if not exists moddatetime schema extensions;
 
 create table profiles
 (
-    id         uuid primary key         default gen_random_uuid(),
+    id         uuid primary key default gen_random_uuid(),
     user_id    uuid not null references auth.users (id) on delete cascade unique,
     first_name text not null,
     last_name  text not null,
+    username   text not null unique,
     bio        text,
     pronouns   text,
-    admin      boolean                  default false,
+    admin      boolean          default false,
 
-    created_at timestamptz default now(),
-    updated_at timestamptz default now()
+    created_at timestamptz      default now(),
+    updated_at timestamptz      default now()
 );
 
 -- Determine if the current user is an admin
