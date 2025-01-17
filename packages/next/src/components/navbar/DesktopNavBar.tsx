@@ -2,12 +2,12 @@ import { FullLogo } from "../FullLogo";
 import { NavItem } from "./NavItem";
 import { logout } from "@/app/(auth)/actions";
 
-interface DesktopTopBarProps {
+interface DesktopNavBarProps {
   className?: string;
 }
 
-export default async function DesktopTopBar({ className }: DesktopTopBarProps) {
-  const logoutWithPath = logout.bind(null, "/");
+export default async function DesktopNavBar({ className }: DesktopNavBarProps) {
+  const logoutWithPath = logout.bind(null);
 
   return (
     <div
