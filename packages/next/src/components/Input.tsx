@@ -22,6 +22,7 @@ export default function TextInput({
     <div className={`flex flex-col gap-2 ${className || ""}`}>
       {label && <label htmlFor={id}>{label}</label>}
       {multiline ? (
+        // @ts-expect-error types not implemented
         <textarea
           {...props}
           id={id}
