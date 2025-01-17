@@ -76,9 +76,7 @@ export default function EditProfileForm({
   const [isPending, startTransition] = useTransition();
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log(data);
     startTransition(async () => {
-      console.log(data);
       const { error } = await onSubmitAction({
         ...data,
         pronouns:
