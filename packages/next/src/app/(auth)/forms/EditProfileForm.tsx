@@ -3,11 +3,10 @@
 import Button from "../../../components/Button";
 import Input from "../../../components/Input";
 import { profileSchema } from "@theconcertpal/common/zod";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Select from "@/components/Select";
-import { useTransition } from "react";
 import { Tables } from "@theconcertpal/supabase";
+import useServerActionForm from "@/hooks/useServerActionForm";
 
 interface EditProfileFormProps {
   className?: string;
@@ -28,32 +27,27 @@ export default function EditProfileForm({
 }: EditProfileFormProps) {
   const {
     register: registerLogout,
-    handleSubmit: handleSubmitLogout,
-    formState: { errors: logoutErrors, isSubmitting: isLoggingOut },
-    setError: setLogoutError,
-  } = useForm();
-
-  const [isPendingLogout, startTransitionLogout] = useTransition();
-
-  const onSubmitLogout = handleSubmitLogout(async () => {
-    startTransitionLogout(async () => {
-      const { error } = await onLogoutAction();
-
-      if (error) {
-        setLogoutError("submit", {
-          message: error,
-        });
-      }
-    });
+    formState: { errors: logoutErrors },
+    loading: isLoggingOut,
+    onSubmit: onSubmitLogout,
+  } = useServerActionForm({
+    onSubmitAction: onLogoutAction,
   });
 
   const {
     register,
-    handleSubmit,
     watch,
-    formState: { errors, isSubmitting },
-    setError,
-  } = useForm({
+    formState: { errors },
+    loading,
+    onSubmit,
+  } = useServerActionForm({
+    onSubmitAction: (data) => {
+      return onSubmitAction({
+        ...data,
+        pronouns:
+          data.pronouns === "other" ? data.pronounsOther : data.pronouns,
+      });
+    },
     resolver: zodResolver(profileSchema),
     defaultValues: prevData
       ? ({
@@ -72,24 +66,6 @@ export default function EditProfileForm({
       : undefined,
   });
   const pronounSelection = watch("pronouns");
-
-  const [isPending, startTransition] = useTransition();
-
-  const onSubmit = handleSubmit(async (data) => {
-    startTransition(async () => {
-      const { error } = await onSubmitAction({
-        ...data,
-        pronouns:
-          pronounSelection === "other" ? data.pronounsOther : data.pronouns,
-      });
-
-      if (error) {
-        setError("submit", {
-          message: error,
-        });
-      }
-    });
-  });
 
   return (
     <div className={`flex flex-col gap-8 ${className || ""}`}>
@@ -161,7 +137,7 @@ export default function EditProfileForm({
           {...register("submit")}
           id="submit"
           type="submit"
-          loading={isSubmitting || isPending}
+          loading={loading}
           label={"Save"}
           errors={errors}
         />
@@ -171,7 +147,7 @@ export default function EditProfileForm({
           {...registerLogout("submit")}
           id="submit"
           type="submit"
-          loading={isLoggingOut || isPendingLogout}
+          loading={isLoggingOut}
           label={"Sign Out"}
           errors={logoutErrors}
           color="error"

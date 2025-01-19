@@ -1,10 +1,14 @@
 "use server";
 
+import { routes } from "@/routes";
 import { createServerClient } from "@/utils/supabase/server";
+import { isAuthError } from "@supabase/supabase-js";
 import {
   login as _login,
   signup as _signup,
   createOrEditProfile as _createOrEditProfile,
+  requestPasswordReset as _requestPasswordReset,
+  resetPassword as _resetPassword,
 } from "@theconcertpal/common/actions";
 import { redirect } from "next/navigation";
 
@@ -15,26 +19,47 @@ export async function login(formData: any) {
 
   if (error) {
     console.error(error);
+
+    if (isAuthError(error)) {
+      if (error.code === "email_not_confirmed") {
+        // Resend email and redirect to the email confirmation page
+        const { error: resendError } = await _signup(supabase, {
+          email: formData.email,
+          password: formData.password,
+          confirmPassword: formData.password,
+        });
+
+        if (resendError) {
+          console.error(resendError);
+          return {
+            error: resendError?.message ?? "An error occurred",
+          };
+        }
+
+        redirect(routes.auth.verifyEmail());
+      }
+    }
+
     return {
       error: error.message,
     };
   }
 
-  redirect("/my-shows");
+  redirect(routes.myShows());
 }
 
 export async function signup(formData: any) {
   const supabase = await createServerClient();
-  const { data, error } = await _signup(supabase, formData);
+  const { error } = await _signup(supabase, formData);
 
-  if (error || !data) {
+  if (error) {
     console.error(error);
     return {
-      error: error.message,
+      error: error?.message ?? "An error occurred",
     };
   }
 
-  redirect(`/create-profile?email=${data.email!}`);
+  redirect(routes.auth.verifyEmail());
 }
 
 export async function logout() {
@@ -48,7 +73,35 @@ export async function logout() {
     };
   }
 
-  redirect("/");
+  redirect(routes.root());
+}
+
+export async function requestPasswordReset(formData: any) {
+  const supabase = await createServerClient();
+  const { error } = await _requestPasswordReset(supabase, formData);
+
+  if (error) {
+    console.error(error);
+    return {
+      error: error.message,
+    };
+  }
+
+  redirect(routes.auth.resetPassword());
+}
+
+export async function resetPassword(formData: any) {
+  const supabase = await createServerClient();
+  const { error } = await _resetPassword(supabase, formData);
+
+  if (error) {
+    console.error(error);
+    return {
+      error: error.message,
+    };
+  }
+
+  redirect(routes.auth.resetPassword({ success: "true" }));
 }
 
 export async function createOrEditProfile(formData: any) {
@@ -64,5 +117,6 @@ export async function createOrEditProfile(formData: any) {
     };
   }
 
-  redirect("/my-shows");
+  // TODO: Redirect to the user's profile page if updating
+  redirect(routes.myShows());
 }

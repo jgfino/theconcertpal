@@ -27,3 +27,25 @@ export const signupSchema = z
   });
 
 export type SignupSchema = z.infer<typeof signupSchema>;
+
+export const requestPasswordResetSchema = z.object({
+  email: z.string().email({ message: "Invalid email" }),
+});
+
+export type RequestPasswordResetSchema = z.infer<
+  typeof requestPasswordResetSchema
+>;
+
+export const resetPasswordSchema = z
+  .object({
+    password: z.string().regex(passwordValidation, {
+      message:
+        "Password must be at least 8 characters and contain at least one uppercase letter, one lowercase letter, and one number",
+    }),
+    confirmPassword: z.string(),
+    tokenHash: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });

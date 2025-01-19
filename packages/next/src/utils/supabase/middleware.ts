@@ -1,16 +1,8 @@
+import { AUTH_ROUTES, isPublicRoute, PROTECTED_ROUTES } from "@/routes";
 import { createServerClient } from "@supabase/ssr";
 import { getProfile } from "@theconcertpal/common/queries";
 import { Database } from "@theconcertpal/supabase";
 import { NextResponse, type NextRequest } from "next/server";
-
-const PUBLIC_ROUTES = [
-  "/sign-in",
-  "/create-account",
-  "/explore",
-  "/reviews-and-photos",
-  "/music-news",
-  "/about",
-];
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
@@ -50,15 +42,10 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const isPublic =
-    PUBLIC_ROUTES.some((route) => request.nextUrl.pathname.startsWith(route)) ||
-    request.nextUrl.pathname === "/";
-
-  if (!user && !isPublic) {
+  if (!user && !isPublicRoute(request.nextUrl.pathname)) {
     // no user, redirect to sign-in
     const url = request.nextUrl.clone();
-    url.searchParams.delete("email");
-    url.pathname = `/sign-in`;
+    url.pathname = AUTH_ROUTES.SIGN_IN;
     return NextResponse.redirect(url);
   }
 
@@ -66,29 +53,33 @@ export async function updateSession(request: NextRequest) {
     // If there is a user, check if there is a profile
     const { data } = await getProfile(supabase);
 
-    if (!data && !request.nextUrl.pathname.startsWith("/create-profile")) {
-      // no profile, redirect to create-profile but still keep session details
+    // no profile, redirect to create-profile but still keep session details
+    if (
+      !data &&
+      !request.nextUrl.pathname.startsWith(PROTECTED_ROUTES.CREATE_PROFILE)
+    ) {
       const url = request.nextUrl.clone();
-      url.pathname = "/create-profile";
+      url.pathname = PROTECTED_ROUTES.CREATE_PROFILE;
       url.searchParams.set("email", user.email!);
       return NextResponse.redirect(url);
     }
 
     // Can't go to sign-in or create-account if already logged in
     if (
-      request.nextUrl.pathname.startsWith("/sign-in") ||
-      request.nextUrl.pathname.startsWith("/create-account")
+      request.nextUrl.pathname.startsWith(AUTH_ROUTES.SIGN_IN) ||
+      request.nextUrl.pathname.startsWith(AUTH_ROUTES.CREATE_ACCOUNT)
     ) {
       const url = request.nextUrl.clone();
-      url.searchParams.delete("email");
       url.pathname = "/";
       return NextResponse.redirect(url);
     }
 
     // Can't go to create-profile if already has a profile
-    if (data && request.nextUrl.pathname.startsWith("/create-profile")) {
+    if (
+      data &&
+      request.nextUrl.pathname.startsWith(PROTECTED_ROUTES.CREATE_PROFILE)
+    ) {
       const url = request.nextUrl.clone();
-      url.searchParams.delete("email");
       url.pathname = "/";
       return NextResponse.redirect(url);
     }

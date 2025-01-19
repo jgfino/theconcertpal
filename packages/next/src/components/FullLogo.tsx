@@ -1,6 +1,7 @@
 import Image from "next/image";
 import logo from "../../public/logo.png";
 import Link from "next/link";
+import { routes } from "@/routes";
 
 interface FullLogoProps {
   className?: string;
@@ -8,11 +9,11 @@ interface FullLogoProps {
 
 export function FullLogo({ className }: FullLogoProps) {
   return (
-    <Link href="/">
+    <Link href={routes.root()}>
       <span
         className={`text-2xl hidden lg:block lg:text-5xl font-black text-primary text-nowrap ${className || ""}`}
       >
-        The ConcertPal
+        The Logo
       </span>
       <Image
         width={36}

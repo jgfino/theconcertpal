@@ -2,11 +2,16 @@
 
 import Button from "../../../components/Button";
 import Input from "../../../components/Input";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { loginSchema, signupSchema } from "@theconcertpal/common/zod";
-import { useTransition } from "react";
+import {
+  LoginSchema,
+  loginSchema,
+  SignupSchema,
+  signupSchema,
+} from "@theconcertpal/common/zod";
+import useServerActionForm from "@/hooks/useServerActionForm";
+import { routes } from "@/routes";
 
 interface LoginSignupFormProps {
   className?: string;
@@ -21,26 +26,16 @@ export default function LoginSignupForm({
 }: LoginSignupFormProps) {
   const {
     register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-    setError,
-  } = useForm({
+    watch,
+    formState: { errors },
+    loading,
+    onSubmit,
+  } = useServerActionForm<LoginSchema | SignupSchema>({
+    onSubmitAction,
     resolver: zodResolver(type === "login" ? loginSchema : signupSchema),
   });
 
-  const [isPending, startTransition] = useTransition();
-
-  const onSubmit = handleSubmit(async (data) => {
-    startTransition(async () => {
-      const { error } = await onSubmitAction(data);
-
-      if (error) {
-        setError("submit", {
-          message: error,
-        });
-      }
-    });
-  });
+  const email = watch("email");
 
   return (
     <div className={`flex flex-col gap-8 ${className || ""}`}>
@@ -58,23 +53,27 @@ export default function LoginSignupForm({
           label="Password"
           type="password"
           errors={errors}
+          rightHref={
+            type === "login"
+              ? `/forgot-password${email ? `?email=${email}` : ""}`
+              : undefined
+          }
+          rightText={type === "login" ? "Forgot Password?" : undefined}
         />
         {type === "signup" && (
-          <>
-            <Input
-              {...register("confirmPassword")}
-              id="confirmPassword"
-              label="Confirm Password"
-              type="password"
-              errors={errors}
-            />
-          </>
+          <Input
+            {...register("confirmPassword")}
+            id="confirmPassword"
+            label="Confirm Password"
+            type="password"
+            errors={errors}
+          />
         )}
         <Button
           {...register("submit")}
           id="submit"
           type="submit"
-          loading={isSubmitting || isPending}
+          loading={loading}
           label={type === "login" ? "Log In" : "Sign Up"}
           errors={errors}
         />
@@ -87,7 +86,11 @@ export default function LoginSignupForm({
         </span>
         <Link
           className="underline"
-          href={type === "login" ? "/create-account" : "/sign-in"}
+          href={
+            type === "login"
+              ? routes.auth.createAccount()
+              : routes.auth.signIn()
+          }
         >
           {type === "login" ? "Join Now!" : "Sign In"}
         </Link>

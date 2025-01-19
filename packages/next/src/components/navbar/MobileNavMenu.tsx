@@ -7,6 +7,7 @@ import { NavItem } from "./NavItem";
 import Link from "next/link";
 import { IoLogoInstagram, IoMdMail } from "react-icons/io";
 import { useRouter } from "next/navigation";
+import { routes } from "@/routes";
 
 const Hamburger = dynamic(() => import("./Hamburger"), { ssr: false });
 
@@ -50,23 +51,23 @@ export default function MobileNavMenu({ className }: HamburgerProps) {
         <div className="bg-bg h-full flex flex-col items-center justify-center gap-4">
           <NavItem
             text="My Shows"
-            onClick={() => handleNavItemPressed("/my-shows")}
+            onClick={() => handleNavItemPressed(routes.myShows())}
           />
           <NavItem
             text="Journal"
-            onClick={() => handleNavItemPressed("/journal")}
+            onClick={() => handleNavItemPressed(routes.journal())}
           />
           <NavItem
             text="Explore"
-            onClick={() => handleNavItemPressed("/explore")}
+            onClick={() => handleNavItemPressed(routes.explore())}
           />
           <NavItem
             className="mt-4"
             text="Reviews & Photos"
-            onClick={() => handleNavItemPressed("/live-reviews-photos")}
+            onClick={() => handleNavItemPressed(routes.reviewsPhotos())}
           />
-          <NavItem text="News" href="/music-news" />
-          <NavItem text="About" href="/about" />
+          <NavItem text="News" href={routes.news()} />
+          <NavItem text="About" href={routes.about()} />
           <Link
             className="text-fg-alt mt-4"
             target="_blank"
@@ -80,7 +81,7 @@ export default function MobileNavMenu({ className }: HamburgerProps) {
           <NavItem
             className="text-fg-alt text-sm"
             text="Privacy Policy"
-            href="/privacy-policy"
+            href={routes.privacyPolicy()}
           />
         </div>
       </div>

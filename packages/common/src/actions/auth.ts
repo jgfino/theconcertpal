@@ -1,5 +1,10 @@
 import { SupabaseClient } from "@supabase/supabase-js";
-import { loginSchema, signupSchema } from "../zod";
+import {
+  loginSchema,
+  requestPasswordResetSchema,
+  resetPasswordSchema,
+  signupSchema,
+} from "../zod";
 import { Database } from "@theconcertpal/supabase";
 
 /**
@@ -16,17 +21,7 @@ export async function login(supabase: SupabaseClient<Database>, formData: any) {
     };
   }
 
-  const { error } = await supabase.auth.signInWithPassword(validatedData.data);
-
-  if (error) {
-    return {
-      error: error,
-    };
-  }
-
-  return {
-    error: null,
-  };
+  return await supabase.auth.signInWithPassword(validatedData.data);
 }
 
 /**
@@ -46,44 +41,70 @@ export async function signup(
     };
   }
 
-  const { data, error } = await supabase.auth.signUp({
+  return await supabase.auth.signUp({
     email: validatedData.data.email.trim(),
     password: validatedData.data.password.trim(),
   });
-
-  if (error) {
-    return {
-      error: error,
-    };
-  }
-
-  if (!data?.user) {
-    return {
-      error: {
-        message: "Error creating user",
-      },
-    };
-  }
-
-  return {
-    data: data.user,
-    error: null,
-  };
 }
 
 /**
  * Logout the current user
  */
 export async function logout(supabase: SupabaseClient<Database>) {
-  const { error } = await supabase.auth.signOut();
+  return await supabase.auth.signOut();
+}
 
-  if (error) {
+/**
+ * Send a password reset email
+ */
+export async function requestPasswordReset(
+  supabase: SupabaseClient<Database>,
+  formData: any
+) {
+  const validatedData = requestPasswordResetSchema.safeParse(formData);
+
+  if (!validatedData.success) {
     return {
-      error: error,
+      error: {
+        message: "Invalid data",
+      },
     };
   }
 
-  return {
-    error: null,
-  };
+  return await supabase.auth.resetPasswordForEmail(
+    validatedData.data.email.trim()
+  );
+}
+
+/**
+ * Reset a user's password
+ */
+export async function resetPassword(
+  supabase: SupabaseClient<Database>,
+  formData: any
+) {
+  const validatedData = resetPasswordSchema.safeParse(formData);
+
+  if (!validatedData.success) {
+    return {
+      error: {
+        message: "Invalid data",
+      },
+    };
+  }
+
+  const { error: loginError } = await supabase.auth.verifyOtp({
+    token_hash: validatedData.data.tokenHash.trim(),
+    type: "recovery",
+  });
+
+  if (loginError) {
+    return {
+      error: loginError,
+    };
+  }
+
+  return await supabase.auth.updateUser({
+    password: validatedData.data.password.trim(),
+  });
 }

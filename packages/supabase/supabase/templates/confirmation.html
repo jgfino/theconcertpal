@@ -1,0 +1,29 @@
+<p>Hi there,</p>
+
+<br />
+
+<p>Thanks for signing up for a The ConcertPal account! If you're using our mobile app, please enter the code below to
+    verify your account:</p>
+<h2>{{ .Token }}</h2>
+
+<br />
+
+<p>If you're using a web browser, please click the link below:
+<p><a href="{{ .SiteURL }}/auth?token_hash={{ .TokenHash }}&type=signup">Verify Email</a></p>
+
+<br />
+
+<p>If that doesn't work, copy and paste this link into your browser:</p>
+<p><a href="{{ .SiteURL }}/auth?token_hash={{ .TokenHash }}&type=signup">{{ .SiteURL
+        }}/auth?token_hash={{
+        .TokenHash }}&type=signup</a></p>
+
+<br />
+
+<p>This code will expire in 1 hour. If your code expires, please sign up again to receive a new code. If you didn't sign
+    up for an account, this email can be safely ignored.</p>
+
+<br />
+
+<p>Best,</p>
+<p>The ConcertPal Team</p>

@@ -5,7 +5,7 @@ import { Spinner } from "./Spinner";
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  id: string;
+  id?: string;
   errors?: FieldErrors<FieldValues>;
   loading?: boolean;
   color?: string;
@@ -40,13 +40,15 @@ export default function InputButton({
 
   return (
     <div className="flex flex-col gap-4">
-      <ErrorMessage
-        errors={errors}
-        name={id}
-        render={({ message }) =>
-          message ? <div className="text-error">{message}</div> : null
-        }
-      />
+      {errors && id && (
+        <ErrorMessage
+          errors={errors}
+          name={id}
+          render={({ message }) =>
+            message ? <div className="text-error">{message}</div> : null
+          }
+        />
+      )}
       <button
         {...props}
         id={id}

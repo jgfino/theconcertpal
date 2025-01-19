@@ -1,4 +1,5 @@
 import { ErrorMessage } from "@hookform/error-message";
+import Link from "next/link";
 import { FieldErrors, FieldValues } from "react-hook-form";
 
 interface TextInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -7,6 +8,8 @@ interface TextInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   errors?: FieldErrors<FieldValues>;
   inputClassName?: string;
+  rightHref?: string;
+  rightText?: string;
 }
 
 export default function TextInput({
@@ -16,11 +19,20 @@ export default function TextInput({
   className,
   inputClassName,
   errors,
+  rightHref,
+  rightText,
   ...props
 }: TextInputProps) {
   return (
     <div className={`flex flex-col gap-2 ${className || ""}`}>
-      {label && <label htmlFor={id}>{label}</label>}
+      <div className="flex justify-between">
+        {label && <label htmlFor={id}>{label}</label>}
+        {rightHref && (
+          <Link className="text-primary underline" href={rightHref}>
+            {rightText}
+          </Link>
+        )}
+      </div>
       {multiline ? (
         // @ts-expect-error types not implemented
         <textarea

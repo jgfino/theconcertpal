@@ -1,0 +1,28 @@
+<p>Hi there,</p>
+
+<br />
+
+<p>We have received a request to reset your The ConcertPal password. If you're using our mobile app, please enter the
+    code below to reset your password:</p>
+<h2>{{ .Token }}</h2>
+
+<br />
+
+<p>If you're using a web browser, please click the link below:</p>
+<p><a href="{{ .SiteURL }}/reset-password?token_hash={{ .TokenHash }}&type=recovery">Reset Password</a></p>
+
+<br />
+
+<p>If that doesn't work, copy and paste this link into your browser:</p>
+<p><a href="{{ .SiteURL }}/reset-password?token_hash={{ .TokenHash }}&type=recovery">{{ .SiteURL
+        }}/reset-password?token_hash={{ .TokenHash }}&type=recovery</a></p>
+
+<br />
+
+<p>This code will expire in 1 hour. If your code expires, please request a new one. if you didn't request to change your
+    password, this email can be safely ignored.</p>
+
+<br />
+
+<p>Best,</p>
+<p>The ConcertPal Team</p>
