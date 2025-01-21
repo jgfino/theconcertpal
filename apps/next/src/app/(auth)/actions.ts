@@ -4,11 +4,11 @@ import { routes } from "@/routes";
 import { createServerClient } from "@/utils/supabase/server";
 import { isAuthError } from "@supabase/supabase-js";
 import {
-  login as _login,
-  signup as _signup,
   createOrEditProfile as _createOrEditProfile,
+  login as _login,
   requestPasswordReset as _requestPasswordReset,
   resetPassword as _resetPassword,
+  signup as _signup,
 } from "@theconcertpal/common/actions";
 import { redirect } from "next/navigation";
 

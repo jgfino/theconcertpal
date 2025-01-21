@@ -1,5 +1,5 @@
 import Image from "next/image";
-import logo from "../../public/logo.png";
+import logo from "@/assets/logo.png";
 import Link from "next/link";
 import { routes } from "@/routes";
 

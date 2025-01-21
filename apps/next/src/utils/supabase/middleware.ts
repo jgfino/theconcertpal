@@ -1,8 +1,8 @@
-import { AUTH_ROUTES, isPublicRoute, PROTECTED_ROUTES } from "@/routes";
+import { AUTH_ROUTES, PROTECTED_ROUTES, isPublicRoute } from "@/routes";
 import { createServerClient } from "@supabase/ssr";
 import { getProfile } from "@theconcertpal/common/queries";
 import { Database } from "@theconcertpal/supabase";
-import { NextResponse, type NextRequest } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({

@@ -15,6 +15,7 @@
     "@supabase/supabase-js": "^2.47.12",
     "@theconcertpal/common": "workspace:*",
     "@theconcertpal/supabase": "workspace:*",
+    "@vercel/analytics": "^1.4.1",
     "lottie-web": "^5.12.2",
     "next": "15.1.4",
     "react": "^19.0.0",

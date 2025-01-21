@@ -1,13 +1,13 @@
 "use client";
 
-import Button from "../../../components/Button";
-import Input from "../../../components/Input";
+import Button from "@/components/Button";
+import Input from "@/components/Input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import {
   LoginSchema,
-  loginSchema,
   SignupSchema,
+  loginSchema,
   signupSchema,
 } from "@theconcertpal/common/zod";
 import useServerActionForm from "@/hooks/useServerActionForm";
