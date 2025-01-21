@@ -8,6 +8,7 @@ import Link from "next/link";
 import { IoLogoInstagram, IoMdMail } from "react-icons/io";
 import { useRouter } from "next/navigation";
 import { routes } from "@/routes";
+import { logout } from "@/app/(auth)/actions";
 
 const Hamburger = dynamic(() => import("./Hamburger"), { ssr: false });
 
@@ -67,7 +68,7 @@ export default function MobileNavMenu({ className }: HamburgerProps) {
             onClick={() => handleNavItemPressed(routes.reviewsPhotos())}
           />
           <NavItem text="News" href={routes.news()} />
-          <NavItem text="About" href={routes.about()} />
+          <NavItem text="About" onClick={logout} />
           <Link
             className="text-fg-alt mt-4"
             target="_blank"

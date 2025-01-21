@@ -13,7 +13,7 @@ export function FullLogo({ className }: FullLogoProps) {
       <span
         className={`text-2xl hidden lg:block lg:text-5xl font-black text-primary text-nowrap ${className || ""}`}
       >
-        The Logo
+        The ConcertPal
       </span>
       <Image
         width={36}

@@ -9,6 +9,8 @@ export async function updateSession(request: NextRequest) {
     request,
   });
 
+  const url = request.nextUrl.clone();
+
   const supabase = createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -44,7 +46,6 @@ export async function updateSession(request: NextRequest) {
 
   if (!user && !isPublicRoute(request.nextUrl.pathname)) {
     // no user, redirect to sign-in
-    const url = request.nextUrl.clone();
     url.pathname = AUTH_ROUTES.SIGN_IN;
     return NextResponse.redirect(url);
   }
@@ -58,7 +59,6 @@ export async function updateSession(request: NextRequest) {
       !data &&
       !request.nextUrl.pathname.startsWith(PROTECTED_ROUTES.CREATE_PROFILE)
     ) {
-      const url = request.nextUrl.clone();
       url.pathname = PROTECTED_ROUTES.CREATE_PROFILE;
       url.searchParams.set("email", user.email!);
       return NextResponse.redirect(url);
@@ -69,7 +69,6 @@ export async function updateSession(request: NextRequest) {
       request.nextUrl.pathname.startsWith(AUTH_ROUTES.SIGN_IN) ||
       request.nextUrl.pathname.startsWith(AUTH_ROUTES.CREATE_ACCOUNT)
     ) {
-      const url = request.nextUrl.clone();
       url.pathname = "/";
       return NextResponse.redirect(url);
     }
@@ -79,7 +78,6 @@ export async function updateSession(request: NextRequest) {
       data &&
       request.nextUrl.pathname.startsWith(PROTECTED_ROUTES.CREATE_PROFILE)
     ) {
-      const url = request.nextUrl.clone();
       url.pathname = "/";
       return NextResponse.redirect(url);
     }
